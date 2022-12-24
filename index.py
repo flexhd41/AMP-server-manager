@@ -19,6 +19,9 @@ class ServerManager(tk.Tk):
         global max_players_field
         global port_field
         global passwd_field
+        global status_label
+        global red_box
+        global green_box
         # Create buttons to execute, stop, and restart the executable file
         execute_btn = tk.Button(self, text='Execute', command=self.execute)
         stop_btn = tk.Button(self, text='Stop', command=self.stop)
@@ -36,8 +39,13 @@ class ServerManager(tk.Tk):
         passwd_label.pack()
         passwd_field = tk.Entry()
         passwd_field.pack()
-
-
+        red_box = tk.Label(bg="red", width=4, height=2)
+        red_box.pack_forget()
+        green_box = tk.Label(bg="green", width=4, height=2)
+        green_box.pack_forget()
+        # Create a text label to display the status of the server
+        status_label = tk.Label(text="Server inactive")
+        status_label.pack(side="left")
 
 
 
@@ -56,6 +64,9 @@ class ServerManager(tk.Tk):
         global pid
     # Replace "path/to/executable" with the actual path to the executable file
         process = subprocess.Popen(f'AMP_Server.exe {port} {max_players} {passwd}',  creationflags=CREATE_NEW_CONSOLE)
+        status_label.config(text="Server active")
+        red_box.pack_forget()
+        green_box.pack(side="right")
 
         
 
@@ -68,6 +79,9 @@ class ServerManager(tk.Tk):
         print("su1")
         # Terminate the subprocess
         os.kill((process.pid), signal.SIGTERM)
+        status_label.config(text="Server inactive")
+        green_box.pack_forget()
+        red_box.pack(side="right")
 
 
     def restart(self):
